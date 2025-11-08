@@ -476,16 +476,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                 SizedBox(width: AppSpacing.md),
                               ],
                               
-                              AnimatedSize(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                                child: Expanded(
-                                  flex: (state.hasAudioAnswer || state.hasVideoAnswer) ? 1 : 4,
+                              Expanded(
+                                flex: (state.hasAudioAnswer || state.hasVideoAnswer) ? 1 : 4,
+                                child: AnimatedSize(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
                                   child: Padding(
-                                  padding: (state.hasAudioAnswer || state.hasVideoAnswer)
-                                      ? EdgeInsets.zero
-                                      : const EdgeInsets.only(left: 16.0),
-                                  child: Container(
+                                    padding: (state.hasAudioAnswer || state.hasVideoAnswer)
+                                        ? EdgeInsets.zero
+                                        : const EdgeInsets.only(left: 16.0),
+                                    child: Container(
                                     decoration: BoxDecoration(
                                       gradient: (state.hasTextAnswer || 
                                                  state.hasAudioAnswer || 
@@ -574,9 +574,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                ), // End Padding
                               ), // End AnimatedSize
+                              ), // End Expanded
                             ],
                           ),
                         ),
