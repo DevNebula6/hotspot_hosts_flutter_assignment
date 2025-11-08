@@ -9,11 +9,55 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # State Management
+  flutter_bloc: ^9.1.1
+  bloc: ^9.1.0
+  equatable: ^2.0.5
+  
+  # Networking
+  dio: ^5.4.3+1
+  
+  # Media Recording & Playback
+  camera: ^0.11.0+2
+  record: ^6.1.2
+  audioplayers: ^6.1.0
+  video_player: ^2.9.1
+  
+  # File System
+  path_provider: ^2.1.4
+  
+  # Permissions
+  permission_handler: ^12.0.1
+  
+  # UI Utilities
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  flutter_svg: ^2.2.2
+  # Navigation
+  go_router: ^17.0.0
+  
+  # Utilities
+  logger: ^2.4.0
+  get_it: ^9.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/fonts/
+    - assets/icons/image25.png
+  # Fonts
+  fonts:
+    - family: Space Grotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SpaceGrotesk-Bold.ttf
+          weight: 700
