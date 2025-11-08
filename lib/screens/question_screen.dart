@@ -92,496 +92,513 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   // Debug logging
                   debugPrint('BLoC State - hasTextAnswer: ${state.hasTextAnswer}, hasAudioAnswer: ${state.hasAudioAnswer}, hasVideoAnswer: ${state.hasVideoAnswer}');
                   
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Spacer(),
-                      
-                      // Question text
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Why do you want to host with us?',
-                              style: AppTextStyles.h2Bold.copyWith(
-                                color: AppColors.text1,
-                                fontSize: 24,
-                                height: 1.3,
-                              ),
-                            ),
-                            
-                            SizedBox(height: AppSpacing.sm),
-                            
-                            Text(
-                              'Tell us about your intent and what motivates you to create experiences.',
-                              style: AppTextStyles.bodyR2Regular.copyWith(
-                                color: AppColors.text2,
-                                fontSize: 13,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      SizedBox(height: AppSpacing.lg),
-                      
-                      // Text input field
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                        child: CustomTextField(
-                          controller: _textController,
-                          hintText: '/ Start typing here',
-                          maxLines: 6,
-                          maxLength: 600,
-                          onChanged: (value) {
-                            context.read<QuestionAnswerBloc>().add(
-                              UpdateTextAnswer(value),
-                            );
-                          },
-                        ),
-                      ),
-                      
-                      SizedBox(height: AppSpacing.md),
-                      
-                      // Inline audio recording feedback
-                      if (_showAudioRecordingUI) ...[
+                  final screenHeight = MediaQuery.of(context).size.height;
+                  final topPadding = MediaQuery.of(context).padding.top;
+                  final appBarHeight = kToolbarHeight;
+                  
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: screenHeight - topPadding - appBarHeight,
+                          ),
+                          child: IntrinsicHeight(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Spacer(),
+                                
+                                // Question text
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                          child: Container(
-                            padding: EdgeInsets.all(AppSpacing.md),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: AppColors.border1,
-                                width: 1,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                // Status icon
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: _isRecordingAudio 
-                                        ? AppColors.negative.withOpacity(0.2)
-                                        : AppColors.primaryAccent.withOpacity(0.2),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    _isRecordingAudio ? Icons.mic : Icons.check,
-                                    color: _isRecordingAudio 
-                                        ? AppColors.negative 
-                                        : AppColors.primaryAccent,
-                                    size: 20,
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Why do you want to host with us?',
+                                style: AppTextStyles.h2Bold.copyWith(
+                                  color: AppColors.text1,
+                                  fontSize: 24,
+                                  height: 1.3,
                                 ),
-                                
-                                SizedBox(width: AppSpacing.md),
-                                
-                                // Recording info
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _isRecordingAudio 
-                                            ? 'Recording Audio...' 
-                                            : 'Audio Recorded',
-                                        style: AppTextStyles.bodyBBold.copyWith(
-                                          color: AppColors.text1,
-                                          fontSize: 14,
+                              ),
+                              
+                              SizedBox(height: AppSpacing.sm),
+                              
+                              Text(
+                                'Tell us about your intent and what motivates you to create experiences.',
+                                style: AppTextStyles.bodyR2Regular.copyWith(
+                                  color: AppColors.text2,
+                                  fontSize: 13,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        SizedBox(height: AppSpacing.lg),
+                        
+                        // Text input field
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                          child: CustomTextField(
+                            controller: _textController,
+                            hintText: '/ Start typing here',
+                            maxLines: 6,
+                            maxLength: 600,
+                            onChanged: (value) {
+                              context.read<QuestionAnswerBloc>().add(
+                                UpdateTextAnswer(value),
+                              );
+                            },
+                          ),
+                        ),
+                        
+                        SizedBox(height: AppSpacing.md),
+                        
+                        // Inline audio recording feedback
+                        if (_showAudioRecordingUI) ...[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                            child: Container(
+                              padding: EdgeInsets.all(AppSpacing.md),
+                              decoration: BoxDecoration(
+                                color: AppColors.surface.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: AppColors.border1,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  // Status icon
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: _isRecordingAudio 
+                                          ? AppColors.negative.withOpacity(0.2)
+                                          : AppColors.primaryAccent.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      _isRecordingAudio ? Icons.mic : Icons.check,
+                                      color: _isRecordingAudio 
+                                          ? AppColors.negative 
+                                          : AppColors.primaryAccent,
+                                      size: 20,
+                                    ),
+                                  ),
+                                  
+                                  SizedBox(width: AppSpacing.md),
+                                  
+                                  // Recording info
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _isRecordingAudio 
+                                              ? 'Recording Audio...' 
+                                              : 'Audio Recorded',
+                                          style: AppTextStyles.bodyBBold.copyWith(
+                                            color: AppColors.text1,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                      if (_isRecordingAudio)
-                                        Row(
-                                          children: [
-                                            // Waveform visualization
-                                            Expanded(
-                                              child: Container(
-                                                height: 20,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: List.generate(
-                                                    20,
-                                                    (index) => Container(
-                                                      width: 2,
-                                                      height: 4 + (index % 3) * 4.0,
-                                                      decoration: BoxDecoration(
-                                                        color: AppColors.primaryAccent,
-                                                        borderRadius: BorderRadius.circular(1),
+                                        if (_isRecordingAudio)
+                                          Row(
+                                            children: [
+                                              // Waveform visualization
+                                              Expanded(
+                                                child: Container(
+                                                  height: 20,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: List.generate(
+                                                      20,
+                                                      (index) => Container(
+                                                        width: 2,
+                                                        height: 4 + (index % 3) * 4.0,
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.primaryAccent,
+                                                          borderRadius: BorderRadius.circular(1),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(width: AppSpacing.sm),
-                                            Text(
-                                              _audioRecordingDuration,
-                                              style: AppTextStyles.bodyR2Regular.copyWith(
-                                                color: AppColors.primaryAccent,
-                                                fontSize: 12,
+                                              SizedBox(width: AppSpacing.sm),
+                                              Text(
+                                                _audioRecordingDuration,
+                                                style: AppTextStyles.bodyR2Regular.copyWith(
+                                                  color: AppColors.primaryAccent,
+                                                  fontSize: 12,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                
-                                SizedBox(width: AppSpacing.sm),
-                                
-                                // Action button (Stop recording or close)
-                                if (_isRecordingAudio)
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.stop_circle,
-                                      color: AppColors.negative,
-                                      size: 28,
-                                    ),
-                                    onPressed: () => _stopAudioRecording(context),
-                                  )
-                                else
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: AppColors.text2,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _showAudioRecordingUI = false;
-                                      });
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                      ],
-                      
-                      // Inline video recording feedback
-                      if (_showVideoRecordingUI) ...[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                          child: Container(
-                            padding: EdgeInsets.all(AppSpacing.md),
-                            decoration: BoxDecoration(
-                              color: AppColors.surface.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: AppColors.border1,
-                                width: 1,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                // Camera preview or status icon
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: _isRecordingVideo 
-                                        ? Colors.black
-                                        : AppColors.primaryAccent.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: _isRecordingVideo && _cameraController != null && _cameraController!.value.isInitialized
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: CameraPreview(_cameraController!),
-                                        )
-                                      : Icon(
-                                          _isRecordingVideo ? Icons.videocam : Icons.check,
-                                          color: _isRecordingVideo 
-                                              ? AppColors.negative 
-                                              : AppColors.primaryAccent,
-                                          size: 24,
-                                        ),
-                                ),
-                                
-                                SizedBox(width: AppSpacing.md),
-                                
-                                // Recording info
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _isRecordingVideo 
-                                            ? 'Recording Video...' 
-                                            : 'Video Recorded',
-                                        style: AppTextStyles.bodyBBold.copyWith(
-                                          color: AppColors.text1,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      if (_isRecordingVideo)
-                                        Row(
-                                          children: [
-                                            // Recording indicator dot
-                                            Container(
-                                              width: 8,
-                                              height: 8,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.negative,
-                                                shape: BoxShape.circle,
-                                              ),
-                                            ),
-                                            SizedBox(width: AppSpacing.sm),
-                                            Text(
-                                              _videoRecordingDuration,
-                                              style: AppTextStyles.bodyR2Regular.copyWith(
-                                                color: AppColors.negative,
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                
-                                SizedBox(width: AppSpacing.sm),
-                                
-                                // Action button (Stop recording or close)
-                                if (_isRecordingVideo)
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.stop_circle,
-                                      color: AppColors.negative,
-                                      size: 28,
-                                    ),
-                                    onPressed: () => _stopVideoRecording(context),
-                                  )
-                                else
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: AppColors.text2,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _showVideoRecordingUI = false;
-                                      });
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                      ],
-                      
-                      // Audio preview (if audio answer exists)
-                      if (state.hasAudioAnswer) ...[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                          child: AudioPlayerWidget(
-                            audioPath: state.answer.audioPath ?? '',
-                            onDelete: () {
-                              context.read<QuestionAnswerBloc>().add(
-                                const DeleteAudioAnswer(),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                      ],
-                      
-                      // Video preview (if video answer exists)
-                      if (state.hasVideoAnswer) ...[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                          child: VideoPlayerWidget(
-                            videoPath: state.answer.videoPath ?? '',
-                            onDelete: () {
-                              context.read<QuestionAnswerBloc>().add(
-                                const DeleteVideoAnswer(),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: AppSpacing.md),
-                      ],
-                      
-                      // Next button
-                      SafeArea(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: AppSpacing.md,
-                            bottom: AppSpacing.xxl,
-                            left: AppSpacing.lg,
-                            right: AppSpacing.lg,
-                          ),
-                          child: Row(
-                            children: [
-                              // Show media buttons only if no media response exists
-                              if (!state.hasAudioAnswer && !state.hasVideoAnswer) ...[
-                                // Audio and Video buttons
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: AppColors.border1,
-                                        width: 3,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: _MediaButton(
-                                            icon: Icons.mic_none,
-                                            isActive: _isRecordingAudio || _showAudioRecordingUI,
-                                            onTap: () {
-                                              if (_isRecordingAudio) {
-                                                _stopAudioRecording(context);
-                                              } else {
-                                                _startAudioRecording(context);
-                                              }
-                                            },
+                                            ],
                                           ),
-                                        ),
-                                        Container(
-                                          width: 3,
-                                          height: 40,
-                                          color: AppColors.border1,
-                                        ),
-                                        Expanded(
-                                          child: _MediaButton(
-                                            icon: Icons.videocam_outlined,
-                                            isActive: _isRecordingVideo || _showVideoRecordingUI,
-                                            onTap: () {
-                                              if (_isRecordingVideo) {
-                                                _stopVideoRecording(context);
-                                              } else {
-                                                _startVideoRecording(context);
-                                              }
-                                            },
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ),
+                                  
+                                  SizedBox(width: AppSpacing.sm),
+                                  
+                                  // Action button (Stop recording or close)
+                                  if (_isRecordingAudio)
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.stop_circle,
+                                        color: AppColors.negative,
+                                        size: 28,
+                                      ),
+                                      onPressed: () => _stopAudioRecording(context),
+                                    )
+                                  else
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: AppColors.text2,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _showAudioRecordingUI = false;
+                                        });
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.md),
+                        ],
+                        
+                        // Inline video recording feedback
+                        if (_showVideoRecordingUI) ...[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                            child: Container(
+                              padding: EdgeInsets.all(AppSpacing.md),
+                              decoration: BoxDecoration(
+                                color: AppColors.surface.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: AppColors.border1,
+                                  width: 1,
                                 ),
-                                SizedBox(width: AppSpacing.md),
-                              ],
-                              
-                              Expanded(
-                                flex: (state.hasAudioAnswer || state.hasVideoAnswer) ? 1 : 4,
-                                child: AnimatedSize(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                  child: Padding(
-                                    padding: (state.hasAudioAnswer || state.hasVideoAnswer)
-                                        ? EdgeInsets.zero
-                                        : const EdgeInsets.only(left: 16.0),
-                                    child: Container(
+                              ),
+                              child: Row(
+                                children: [
+                                  // Camera preview or status icon
+                                  Container(
+                                    width: 60,
+                                    height: 60,
                                     decoration: BoxDecoration(
-                                      gradient: (state.hasTextAnswer || 
-                                                 state.hasAudioAnswer || 
-                                                 state.hasVideoAnswer)
-                                          ? LinearGradient(
-                                              colors: [
-                                                const Color(0xFF2A2A2A), 
-                                                const Color(0xFF404040), 
-                                                const Color(0xFF2A2A2A),
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.centerRight,
-                                              stops: const [0.0, 0.5, 1.0],
-                                            )
-                                          : null,
+                                      color: _isRecordingVideo 
+                                          ? Colors.black
+                                          : AppColors.primaryAccent.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: (state.hasTextAnswer || 
-                                               state.hasAudioAnswer || 
-                                               state.hasVideoAnswer)
-                                            ? const Color(0xFF555555)
-                                            : AppColors.border1,
-                                        width: 1,
+                                    ),
+                                    child: _isRecordingVideo && _cameraController != null && _cameraController!.value.isInitialized
+                                        ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(8),
+                                            child: CameraPreview(_cameraController!),
+                                          )
+                                        : Icon(
+                                            _isRecordingVideo ? Icons.videocam : Icons.check,
+                                            color: _isRecordingVideo 
+                                                ? AppColors.negative 
+                                                : AppColors.primaryAccent,
+                                            size: 24,
+                                          ),
+                                  ),
+                                  
+                                  SizedBox(width: AppSpacing.md),
+                                  
+                                  // Recording info
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _isRecordingVideo 
+                                              ? 'Recording Video...' 
+                                              : 'Video Recorded',
+                                          style: AppTextStyles.bodyBBold.copyWith(
+                                            color: AppColors.text1,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        if (_isRecordingVideo)
+                                          Row(
+                                            children: [
+                                              // Recording indicator dot
+                                              Container(
+                                                width: 8,
+                                                height: 8,
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.negative,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              SizedBox(width: AppSpacing.sm),
+                                              Text(
+                                                _videoRecordingDuration,
+                                                style: AppTextStyles.bodyR2Regular.copyWith(
+                                                  color: AppColors.negative,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                  
+                                  SizedBox(width: AppSpacing.sm),
+                                  
+                                  // Action button (Stop recording or close)
+                                  if (_isRecordingVideo)
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.stop_circle,
+                                        color: AppColors.negative,
+                                        size: 28,
+                                      ),
+                                      onPressed: () => _stopVideoRecording(context),
+                                    )
+                                  else
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: AppColors.text2,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _showVideoRecordingUI = false;
+                                        });
+                                      },
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.md),
+                        ],
+                        
+                        // Audio preview (if audio answer exists)
+                        if (state.hasAudioAnswer) ...[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                            child: AudioPlayerWidget(
+                              audioPath: state.answer.audioPath ?? '',
+                              onDelete: () {
+                                context.read<QuestionAnswerBloc>().add(
+                                  const DeleteAudioAnswer(),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.md),
+                        ],
+                        
+                        // Video preview (if video answer exists)
+                        if (state.hasVideoAnswer) ...[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                            child: VideoPlayerWidget(
+                              videoPath: state.answer.videoPath ?? '',
+                              onDelete: () {
+                                context.read<QuestionAnswerBloc>().add(
+                                  const DeleteVideoAnswer(),
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.md),
+                        ],
+                        
+                        // Next button
+                        SafeArea(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: AppSpacing.md,
+                              bottom: AppSpacing.xxl,
+                              left: AppSpacing.lg,
+                              right: AppSpacing.lg,
+                            ),
+                            child: Row(
+                              children: [
+                                // Show media buttons only if no media response exists
+                                if (!state.hasAudioAnswer && !state.hasVideoAnswer) ...[
+                                  // Audio and Video buttons
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: AppColors.border1,
+                                          width: 3,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: _MediaButton(
+                                              icon: Icons.mic_none,
+                                              isActive: _isRecordingAudio || _showAudioRecordingUI,
+                                              onTap: () {
+                                                if (_isRecordingAudio) {
+                                                  _stopAudioRecording(context);
+                                                } else {
+                                                  _startAudioRecording(context);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 3,
+                                            height: 40,
+                                            color: AppColors.border1,
+                                          ),
+                                          Expanded(
+                                            child: _MediaButton(
+                                              icon: Icons.videocam_outlined,
+                                              isActive: _isRecordingVideo || _showVideoRecordingUI,
+                                              onTap: () {
+                                                if (_isRecordingVideo) {
+                                                  _stopVideoRecording(context);
+                                                } else {
+                                                  _startVideoRecording(context);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: (state.hasTextAnswer || 
-                                                         state.hasAudioAnswer || 
-                                                         state.hasVideoAnswer)
-                                            ? Colors.transparent
-                                            : AppColors.border1,
-                                        shadowColor: Colors.transparent,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: AppSpacing.md,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      onPressed: (state.hasTextAnswer || 
+                                  ),
+                                  SizedBox(width: AppSpacing.md),
+                                ],
+                                
+                                Expanded(
+                                  flex: (state.hasAudioAnswer || state.hasVideoAnswer) ? 1 : 4,
+                                  child: AnimatedSize(
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOut,
+                                    child: Padding(
+                                      padding: (state.hasAudioAnswer || state.hasVideoAnswer)
+                                          ? EdgeInsets.zero
+                                          : const EdgeInsets.only(left: 16.0),
+                                      child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: (state.hasTextAnswer || 
+                                                   state.hasAudioAnswer || 
+                                                   state.hasVideoAnswer)
+                                            ? LinearGradient(
+                                                colors: [
+                                                  const Color(0xFF2A2A2A), 
+                                                  const Color(0xFF404040), 
+                                                  const Color(0xFF2A2A2A),
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.centerRight,
+                                                stops: const [0.0, 0.5, 1.0],
+                                              )
+                                            : null,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: (state.hasTextAnswer || 
                                                  state.hasAudioAnswer || 
                                                  state.hasVideoAnswer)
-                                          ? () {
-                                              // Log answer data
-                                              debugPrint('=== Answer Data ===');
-                                              debugPrint('Question ID: ${state.answer.questionId}');
-                                              debugPrint('Answer Type: ${state.answer.answerType}');
-                                              debugPrint('Text: ${state.answer.textAnswer}');
-                                              debugPrint('Audio: ${state.answer.audioPath}');
-                                              debugPrint('Video: ${state.answer.videoPath}');
-                                              
-                                              // Show success message
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text('Answer submitted successfully!'),
-                                                  backgroundColor: AppColors.positive,
-                                                ),
-                                              );
-                                            }
-                                          : null,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Next',
-                                            style: AppTextStyles.buttonBold.copyWith(
-                                              fontSize: 20,
+                                              ? const Color(0xFF555555)
+                                              : AppColors.border1,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: (state.hasTextAnswer || 
+                                                           state.hasAudioAnswer || 
+                                                           state.hasVideoAnswer)
+                                              ? Colors.transparent
+                                              : AppColors.border1,
+                                          shadowColor: Colors.transparent,
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: AppSpacing.md,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: (state.hasTextAnswer || 
+                                                   state.hasAudioAnswer || 
+                                                   state.hasVideoAnswer)
+                                            ? () {
+                                                // Log answer data
+                                                debugPrint('=== Answer Data ===');
+                                                debugPrint('Question ID: ${state.answer.questionId}');
+                                                debugPrint('Answer Type: ${state.answer.answerType}');
+                                                debugPrint('Text: ${state.answer.textAnswer}');
+                                                debugPrint('Audio: ${state.answer.audioPath}');
+                                                debugPrint('Video: ${state.answer.videoPath}');
+                                                
+                                                // Show success message
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text('Answer submitted successfully!'),
+                                                    backgroundColor: AppColors.positive,
+                                                  ),
+                                                );
+                                              }
+                                            : null,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Next',
+                                              style: AppTextStyles.buttonBold.copyWith(
+                                                fontSize: 20,
+                                                color: (state.hasTextAnswer || 
+                                                       state.hasAudioAnswer || 
+                                                       state.hasVideoAnswer)
+                                                    ? AppColors.textPrimary
+                                                    : AppColors.textTertiary,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Icon(
+                                              Icons.arrow_forward,
                                               color: (state.hasTextAnswer || 
                                                      state.hasAudioAnswer || 
                                                      state.hasVideoAnswer)
                                                   ? AppColors.textPrimary
                                                   : AppColors.textTertiary,
                                             ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Icon(
-                                            Icons.arrow_forward,
-                                            color: (state.hasTextAnswer || 
-                                                   state.hasAudioAnswer || 
-                                                   state.hasVideoAnswer)
-                                                ? AppColors.textPrimary
-                                                : AppColors.textTertiary,
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ), // End Padding
-                              ), // End AnimatedSize
-                              ), // End Expanded
-                            ],
+                                  ), // End Padding
+                                ), // End AnimatedSize
+                                ), // End Expanded
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                              ], // End Column children
+                            ), // End Column
+                          ), // End IntrinsicHeight
+                        ), // End ConstrainedBox
+                      ); // End SingleChildScrollView
+                    }, // End LayoutBuilder
                   );
                 },
               ),
