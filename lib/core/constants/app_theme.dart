@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hotspot_hosts_flutter_assignment/constants/app_border_radius.dart';
-import 'package:hotspot_hosts_flutter_assignment/constants/app_constants.dart';
-import 'package:hotspot_hosts_flutter_assignment/constants/app_text_styles.dart';
+import 'package:hotspot_hosts_flutter_assignment/core/constants/app_border_radius.dart';
+import 'package:hotspot_hosts_flutter_assignment/core/constants/app_colors.dart';
+import 'package:hotspot_hosts_flutter_assignment/core/constants/app_text_styles.dart';
 
 class AppTheme {
   static ThemeData get darkTheme {
@@ -14,7 +14,6 @@ class AppTheme {
         primary: AppColors.primaryAccent,
         secondary: AppColors.secondaryAccent,
         surface: AppColors.surface,
-        background: AppColors.base,
         error: AppColors.negative,
       ),
       

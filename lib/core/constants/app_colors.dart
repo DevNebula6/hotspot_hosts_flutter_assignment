@@ -8,6 +8,11 @@ class AppColors {
   static const Color text4 = Color(0x3DFFFFFF); // 24% white
   static const Color text5 = Color(0x3DFFFFFF); // 24% white
 
+  // Convenient aliases for text colors
+  static const Color textPrimary = text1;
+  static const Color textSecondary = text2;
+  static const Color textTertiary = text3;
+
   // Base Colors
   static const Color base = Color(0xFF101010); // 100%
   static const Color base2Dark = Color(0xFF151515); // 100%
