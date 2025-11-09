@@ -46,14 +46,28 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   Future<void> _initPlayer() async {
     try {
+      // Set audio mode for playback
+      await _audioPlayer.setReleaseMode(ReleaseMode.stop);
+      await _audioPlayer.setPlayerMode(PlayerMode.mediaPlayer);
+      
       // Set source
       await _audioPlayer.setSource(DeviceFileSource(widget.audioPath));
 
-      // Listen to duration
-      _durationSubscription = _audioPlayer.onDurationChanged.listen((duration) {
+      // Get initial duration (for local files)
+      final duration = await _audioPlayer.getDuration();
+      if (duration != null) {
         setState(() {
           _duration = duration;
         });
+      }
+
+      // Listen to duration changes
+      _durationSubscription = _audioPlayer.onDurationChanged.listen((duration) {
+        if (duration.inSeconds > 0) {
+          setState(() {
+            _duration = duration;
+          });
+        }
       });
 
       // Listen to position
@@ -71,7 +85,12 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         
         // Reset to beginning when completed
         if (state == PlayerState.completed) {
+          setState(() {
+            _position = Duration.zero;
+            _isPlaying = false;
+          });
           _audioPlayer.seek(Duration.zero);
+          _audioPlayer.pause();
         }
       });
     } catch (e) {
@@ -84,7 +103,23 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       if (_isPlaying) {
         await _audioPlayer.pause();
       } else {
-        await _audioPlayer.resume();
+        // Check if player is at the beginning or has never been played
+        if (_position == Duration.zero && !_isPlaying) {
+          await _audioPlayer.play(DeviceFileSource(widget.audioPath));
+          
+          // Get duration after starting playback if not already set
+          if (_duration == Duration.zero) {
+            await Future.delayed(const Duration(milliseconds: 100));
+            final duration = await _audioPlayer.getDuration();
+            if (duration != null && duration.inSeconds > 0) {
+              setState(() {
+                _duration = duration;
+              });
+            }
+          }
+        } else {
+          await _audioPlayer.resume();
+        }
       }
     } catch (e) {
       debugPrint('Error toggling play/pause: $e');
@@ -158,7 +193,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               overlayColor: AppColors.primaryAccent.withOpacity(0.2),
             ),
             child: Slider(
-              value: _position.inSeconds.toDouble(),
+              value: _duration.inSeconds > 0 
+                  ? _position.inSeconds.toDouble().clamp(0.0, _duration.inSeconds.toDouble())
+                  : 0.0,
               max: _duration.inSeconds > 0 ? _duration.inSeconds.toDouble() : 1.0,
               onChanged: (value) async {
                 await _audioPlayer.seek(Duration(seconds: value.toInt()));
